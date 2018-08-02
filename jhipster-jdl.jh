@@ -1,0 +1,23 @@
+//-----ENTITIES-----
+entity City {
+	cityName String required
+}
+entity Genre {
+	genreName String required
+}
+entity Concert{
+	concertName String required
+    date ZonedDateTime required
+    status Integer required
+}
+//-----RELATIONSHIPS-----
+//Genre and City to Concert
+relationship ManyToOne {
+	Genre to Concert{genre}
+}
+relationship OneToMany {
+    City to Concert{city}
+}
+//Option declaration
+paginate Concert with pagination
+paginate Genre with infinite-scroll

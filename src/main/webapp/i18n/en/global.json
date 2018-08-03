@@ -44,7 +44,15 @@
             "confirmpassword": "New password confirmation",
             "confirmpassword.placeholder": "Confirm the new password",
             "email": "Email",
-            "email.placeholder": "Your email"
+            "email.placeholder": "Your email",
+            "birthDate":"Birth date",
+            "birthDate.placeholder":"Your birth date",
+            "userType":"Choose your user type",
+            "userType.placeholder":"Your user type",
+            "userType.type.fan":"Fan",
+            "userType.type.local":"Local",
+            "userType.type.musician":"Musician"
+
         },
         "messages": {
             "info": {

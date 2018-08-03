@@ -2,9 +2,11 @@ package com.ohmusic.service;
 
 import com.ohmusic.domain.Authority;
 import com.ohmusic.domain.User;
+import com.ohmusic.domain.UserExtra;
 import com.ohmusic.repository.AuthorityRepository;
 import com.ohmusic.repository.PersistentTokenRepository;
 import com.ohmusic.config.Constants;
+import com.ohmusic.repository.UserExtraRepository;
 import com.ohmusic.repository.UserRepository;
 import com.ohmusic.security.AuthoritiesConstants;
 import com.ohmusic.security.SecurityUtils;
@@ -39,6 +41,8 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final UserExtraRepository userExtraRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     private final PersistentTokenRepository persistentTokenRepository;
@@ -47,8 +51,9 @@ public class UserService {
 
     private final CacheManager cacheManager;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, PersistentTokenRepository persistentTokenRepository, AuthorityRepository authorityRepository, CacheManager cacheManager) {
+    public UserService(UserRepository userRepository, UserExtraRepository userExtraRepository, PasswordEncoder passwordEncoder, PersistentTokenRepository persistentTokenRepository, AuthorityRepository authorityRepository, CacheManager cacheManager) {
         this.userRepository = userRepository;
+        this.userExtraRepository = userExtraRepository;
         this.passwordEncoder = passwordEncoder;
         this.persistentTokenRepository = persistentTokenRepository;
         this.authorityRepository = authorityRepository;
@@ -93,7 +98,7 @@ public class UserService {
             });
     }
 
-    public User registerUser(UserDTO userDTO, String password) {
+    public User registerUser(UserDTO userDTO, String password, Integer type, LocalDate birthDate) {
 
         User newUser = new User();
         String encryptedPassword = passwordEncoder.encode(password);
@@ -115,6 +120,15 @@ public class UserService {
         userRepository.save(newUser);
         this.clearUserCaches(newUser);
         log.debug("Created Information for User: {}", newUser);
+
+        //User extra fields
+        UserExtra newUserExtra = new UserExtra();
+        newUserExtra.setUser(newUser);
+        newUserExtra.setType(type);
+        newUserExtra.setBirthDate(birthDate);
+        userExtraRepository.save(newUserExtra);
+        log.debug("Created Information for User: {}", newUserExtra);
+
         return newUser;
     }
 
